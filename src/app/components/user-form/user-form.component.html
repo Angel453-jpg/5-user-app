@@ -1,4 +1,51 @@
 <form (ngSubmit)="onSubmit()">
 
+  <div>
+    <input
+      placeholder="Name"
+      name="name"
+      [(ngModel)]="user.name"
+      class="form-control my-2">
+  </div>
+
+  <div>
+    <input
+      placeholder="Last Name"
+      name="lastName"
+      [(ngModel)]="user.lastName"
+      class="form-control my-2">
+  </div>
+
+  <div>
+    <input
+      placeholder="Email"
+      name="email"
+      [(ngModel)]="user.email"
+      class="form-control my-2">
+  </div>
+
+  <div>
+    <input
+      placeholder="Username"
+      name="username"
+      [(ngModel)]="user.username"
+      class="form-control my-2">
+  </div>
+
+  <div>
+    <input
+      placeholder="Password"
+      type="password"
+      name="password"
+      [(ngModel)]="user.password"
+      class="form-control my-2">
+  </div>
+
+  <div>
+    <button type="submit" class="btn btn-primary my-2">
+      Create
+    </button>
+  </div>
+
 </form>
 

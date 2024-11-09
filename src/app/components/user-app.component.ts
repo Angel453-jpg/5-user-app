@@ -23,7 +23,7 @@ export class UserAppComponent implements OnInit {
   }
 
   addUser(user: Users) {
-    this.users = [...this.users, {...user}];
+    this.users = [...this.users, {...user, id: new Date().getTime()}];
   }
 
 }
