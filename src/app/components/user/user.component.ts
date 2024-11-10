@@ -1,10 +1,13 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {Users} from '../../models/users';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'user',
   standalone: true,
-  imports: [],
+  imports: [
+    RouterLink
+  ],
   templateUrl: './user.component.html'
 })
 export class UserComponent {
