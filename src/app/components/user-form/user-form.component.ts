@@ -15,6 +15,7 @@ export class UserFormComponent {
   @Input() user: Users;
 
   @Output() newUserEventEmitter: EventEmitter<Users> = new EventEmitter();
+  @Output() openEventEmitter = new EventEmitter();
 
   constructor() {
     this.user = new Users();
@@ -33,6 +34,10 @@ export class UserFormComponent {
 
   onClear(userForm: NgForm): void {
     userForm.reset();
+  }
+
+  onOpenClose(): void {
+    this.openEventEmitter.emit();
   }
 
 }
