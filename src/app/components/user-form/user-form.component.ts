@@ -31,4 +31,8 @@ export class UserFormComponent {
 
   }
 
+  onClear(userForm: NgForm): void {
+    userForm.reset();
+  }
+
 }

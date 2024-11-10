@@ -26,7 +26,12 @@ export class UserAppComponent implements OnInit {
   }
 
   addUser(user: Users) {
-    this.users = [...this.users, {...user, id: new Date().getTime()}];
+    if (user.id > 0) {
+      this.users = this.users.map(u => (u.id == user.id) ? {...user} : u);
+    } else {
+      this.users = [...this.users, {...user, id: new Date().getTime()}];
+    }
+    this.userSelected = new Users();
   }
 
   removeUser(id: number) {
