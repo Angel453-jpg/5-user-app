@@ -23,7 +23,7 @@ export class UserFormComponent implements OnInit {
 
   ngOnInit(): void {
 
-    // this.sharingData.selectUserEventEmitter.subscribe(user => this.user = user);
+    this.sharingData.selectUserEventEmitter.subscribe(user => this.user = user);
 
     this.route.paramMap.subscribe(params => {
       const id: number = +(params.get('id') || '0');

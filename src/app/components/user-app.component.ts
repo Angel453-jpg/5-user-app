@@ -40,12 +40,18 @@ export class UserAppComponent implements OnInit {
     this.sharingData.newUserEventEmitter.subscribe(user => {
 
       if (user.id > 0) {
-        this.users = this.users.map(u => (u.id == user.id) ? {...user} : u);
+        this.service.update(user).subscribe(userUpdate => {
+          this.users = this.users.map(u => (u.id == userUpdate.id) ? {...userUpdate} : u);
+        })
+
       } else {
-        this.users = [...this.users, {...user, id: new Date().getTime()}];
+        this.service.create(user).subscribe(userNew => {
+          console.log(userNew);
+          this.users = [...this.users, {...userNew}];
+        })
       }
 
-      this.router.navigate(['/users'], {state: {users: this.users}});
+      this.router.navigate(['/users']);
 
       Swal.fire({
         title: "Guardado!",
