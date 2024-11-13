@@ -3,6 +3,7 @@ import {FormsModule, NgForm} from '@angular/forms';
 import {Users} from '../../models/users';
 import {SharingDataService} from '../../services/sharing-data.service';
 import {ActivatedRoute} from '@angular/router';
+import {UserService} from '../../services/user.service';
 
 @Component({
   selector: 'user-form',
@@ -16,22 +17,23 @@ export class UserFormComponent implements OnInit {
 
   user: Users;
 
-  constructor(private sharingData: SharingDataService, private route: ActivatedRoute) {
+  constructor(private sharingData: SharingDataService, private route: ActivatedRoute, private service: UserService) {
     this.user = new Users();
   }
 
   ngOnInit(): void {
 
-    this.sharingData.selectUserEventEmitter.subscribe(user => this.user = user);
+    // this.sharingData.selectUserEventEmitter.subscribe(user => this.user = user);
 
     this.route.paramMap.subscribe(params => {
       const id: number = +(params.get('id') || '0');
 
       if (id > 0) {
-        this.sharingData.findUserByIdEventEmitter.emit(id);
+        // this.sharingData.findUserByIdEventEmitter.emit(id);
+        this.service.findById(id).subscribe(user => this.user = user);
       }
 
-    })
+    });
   }
 
   onSubmit(userForm: NgForm): void {

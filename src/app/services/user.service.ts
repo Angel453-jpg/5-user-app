@@ -8,14 +8,17 @@ import {HttpClient} from '@angular/common/http';
 })
 export class UserService {
 
-  private users: Users[] = [];
+  private url: string = 'http://localhost:8080/api/users';
 
   constructor(private http: HttpClient) {
   }
 
   findAll(): Observable<Users[]> {
-    // return of(this.users);
-    return this.http.get<Users[]>('http://localhost:8080/api/users');
+    return this.http.get<Users[]>(this.url);
+  }
+
+  findById(id: number): Observable<Users> {
+    return this.http.get<Users>(`${this.url}/${id}`);
   }
 
 }
