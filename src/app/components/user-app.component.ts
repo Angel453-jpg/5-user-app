@@ -40,25 +40,48 @@ export class UserAppComponent implements OnInit {
     this.sharingData.newUserEventEmitter.subscribe(user => {
 
       if (user.id > 0) {
-        this.service.update(user).subscribe(userUpdate => {
-          this.users = this.users.map(u => (u.id == userUpdate.id) ? {...userUpdate} : u);
-          this.router.navigate(['/users'], {state: {users: this.users}});
+        this.service.update(user).subscribe({
+          next: (userUpdate) => {
+            this.users = this.users.map(u => (u.id == userUpdate.id) ? {...userUpdate} : u);
+            this.router.navigate(['/users'], {state: {users: this.users}});
+
+            Swal.fire({
+              title: "Actualizado!",
+              text: "Usuario editado con éxito!",
+              icon: "success"
+            });
+
+          },
+          error: (err) => {
+            // console.log(err.error)
+            if (err.status == 400) {
+              this.sharingData.errorsUserFormEventEmitter.emit(err.error);
+            }
+          }
         })
 
       } else {
-        this.service.create(user).subscribe(userNew => {
-          console.log(userNew);
-          this.users = [...this.users, {...userNew}];
-          this.router.navigate(['/users'], {state: {users: this.users}});
+        this.service.create(user).subscribe({
+          next: userNew => {
+            console.log(userNew);
+            this.users = [...this.users, {...userNew}];
+            this.router.navigate(['/users'], {state: {users: this.users}});
+
+            Swal.fire({
+              title: "Creado nuevo usuario!",
+              text: "Usuario creado con éxito!",
+              icon: "success"
+            });
+
+          },
+          error: (err) => {
+            console.log(err.status)
+            if (err.status == 400) {
+              this.sharingData.errorsUserFormEventEmitter.emit(err.error);
+            }
+          }
         })
       }
-
-
-      Swal.fire({
-        title: "Guardado!",
-        text: "Usuario guardado con éxito!",
-        icon: "success"
-      });
     })
 
   }
