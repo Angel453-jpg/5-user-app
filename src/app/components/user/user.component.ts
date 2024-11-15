@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Users} from '../../models/users';
-import {Router, RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {SharingDataService} from '../../services/sharing-data.service';
 
@@ -18,7 +18,7 @@ export class UserComponent implements OnInit {
 
   users: Users[] = [];
 
-  constructor(private router: Router, private service: UserService, private sharingData: SharingDataService) {
+  constructor(private router: Router, private service: UserService, private sharingData: SharingDataService, private route: ActivatedRoute) {
     if (this.router.getCurrentNavigation()?.extras.state) {
       this.users = this.router.getCurrentNavigation()?.extras.state!['users'];
     }
@@ -28,7 +28,12 @@ export class UserComponent implements OnInit {
 
     if (this.users == undefined || this.users.length == 0) {
       console.log('consulta findAll')
-      this.service.findAll().subscribe(users => this.users = users);
+      // this.service.findAll().subscribe(users => this.users = users);
+      this.route.paramMap.subscribe(params => {
+        const page = +(params.get('page') || '0');
+        this.service.findAllPageable(page).subscribe(pageable => this.users = pageable.content as Users[]);
+
+      })
     }
 
   }
