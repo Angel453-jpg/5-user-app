@@ -1,14 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+  import {Component, OnInit} from '@angular/core';
 import {Users} from '../../models/users';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {SharingDataService} from '../../services/sharing-data.service';
+  import {PaginatorComponent} from '../paginator/paginator.component';
 
 @Component({
   selector: 'user',
   standalone: true,
   imports: [
-    RouterLink
+    RouterLink, PaginatorComponent
   ],
   templateUrl: './user.component.html'
 })
@@ -17,6 +18,8 @@ export class UserComponent implements OnInit {
   title: string = 'Listado de usuarios!';
 
   users: Users[] = [];
+
+  paginator: any = {};
 
   constructor(private router: Router, private service: UserService, private sharingData: SharingDataService, private route: ActivatedRoute) {
     if (this.router.getCurrentNavigation()?.extras.state) {
@@ -33,8 +36,9 @@ export class UserComponent implements OnInit {
         const page = +(params.get('page') || '0');
         console.log(page)
         this.service.findAllPageable(page).subscribe(pageable => {
-          this.users = pageable.content as Users[]
-          this.sharingData.pageUsersEventEmitter.emit(this.users);
+          this.users = pageable.content as Users[];
+          this.paginator = pageable;
+          this.sharingData.pageUsersEventEmitter.emit({users: this.users, paginator: this.paginator});
         });
 
       })

@@ -19,6 +19,8 @@ export class UserAppComponent implements OnInit {
 
   users: Users[] = [];
 
+  paginator: any = {};
+
   constructor(private service: UserService, private sharingData: SharingDataService, private router: Router, private route: ActivatedRoute) {
   }
 
@@ -36,7 +38,10 @@ export class UserAppComponent implements OnInit {
   }
 
   pageUsersEvent() {
-    this.sharingData.pageUsersEventEmitter.subscribe(users => this.users = users);
+    this.sharingData.pageUsersEventEmitter.subscribe(pageable => {
+      this.users = pageable;
+      this.paginator = pageable.paginator;
+    });
   }
 
   findUserById() {
