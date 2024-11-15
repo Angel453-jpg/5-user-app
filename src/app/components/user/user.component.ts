@@ -31,7 +31,11 @@ export class UserComponent implements OnInit {
       // this.service.findAll().subscribe(users => this.users = users);
       this.route.paramMap.subscribe(params => {
         const page = +(params.get('page') || '0');
-        this.service.findAllPageable(page).subscribe(pageable => this.users = pageable.content as Users[]);
+        console.log(page)
+        this.service.findAllPageable(page).subscribe(pageable => {
+          this.users = pageable.content as Users[]
+          this.sharingData.pageUsersEventEmitter.emit(this.users);
+        });
 
       })
     }
