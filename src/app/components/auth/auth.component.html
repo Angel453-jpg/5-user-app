@@ -1,22 +1,31 @@
-<div class="card">
-  <div class="card-title-deader">
-    <h5 class="card-title">Login Page</h5>
+<div class="d-flex justify-content-center align-items-center vh-70">
+  <div class="card shadow" style="width: 450px; padding: 20px">
+
+    <div class="card-header text-center">
+      <h4 class="card-title">Login Page</h4>
+    </div>
+
     <div class="card-body">
       <form (ngSubmit)="onSubmit()">
 
-        <input name="username"
-               class="form-control"
-               placeholder="Username"
-               [ngModel]="user.username"
-        >
-        <input name="password"
-               class="form-control"
-               type="password"
-               placeholder="Password"
-               [ngModel]="user.password"
-        >
+        <div class="mb-4">
+          <input name="username"
+                 class="form-control form-control-lg"
+                 placeholder="Username"
+                 [(ngModel)]="user.username"
+          >
+        </div>
 
-        <button class="btn-primary" type="submit">
+        <div class="mb-4">
+          <input name="password"
+                 class="form-control form-control-lg"
+                 type="password"
+                 placeholder="Password"
+                 [(ngModel)]="user.password"
+          >
+        </div>
+
+        <button class="btn btn-primary btn-lg w-100" type="submit">
           Login
         </button>
 
@@ -24,3 +33,4 @@
     </div>
   </div>
 </div>
+
