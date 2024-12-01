@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {Users} from '../../models/users';
 import Swal from 'sweetalert2';
 import {FormsModule} from '@angular/forms';
+import {SharingDataService} from '../../services/sharing-data.service';
 
 @Component({
   selector: 'app-auth',
@@ -15,11 +16,11 @@ export class AuthComponent {
 
   user: Users;
 
-  constructor() {
+  constructor(private sharingData: SharingDataService) {
     this.user = new Users();
   }
 
-  onSubmit(){
+  onSubmit() {
     if (!this.user.username || !this.user.password) {
 
       Swal.fire(
@@ -29,7 +30,7 @@ export class AuthComponent {
       );
 
     } else {
-      console.log(this.user);
+      this.sharingData.handlerLoginEventEmitter.emit({username: this.user.username, password: this.user.password});
     }
 
   }
