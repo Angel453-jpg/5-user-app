@@ -8,16 +8,25 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-link active" aria-current="page" [routerLink]="['/users']" [state]="{users, paginator}">Home</a>
-        <a class="nav-link" [routerLink]="['/users/create']"
-        >New User</a>
+        @if (admin) {
+          <a class="nav-link" [routerLink]="['/users/create']"
+          >New User</a>
+        }
       </div>
     </div>
 
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <span class="nav-item nav-link text-primary mx-3">
-        <a class="btn btn-outline-primary" [routerLink]="['/login']">
+        @if (login.isAuth) {
+          <span class="me-3">
+          {{ login.user.username }}
+          </span>
+          <button class="btn btn-outline-success" (click)="handlerLogout()">Logout</button>
+        } @else {
+          <a class="btn btn-outline-primary" [routerLink]="['/login']">
           Sign In
         </a>
+        }
       </span>
     </div>
 
