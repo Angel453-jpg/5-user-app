@@ -96,34 +96,36 @@
 
         </div>
 
-        <div>
-          <input
-            placeholder="Password"
-            type="password"
-            name="password"
-            [(ngModel)]="user.password"
-            class="form-control my-2"
-          >
+        @if (user.id == 0){
+          <div>
+            <input
+              placeholder="Password"
+              type="password"
+              name="password"
+              [(ngModel)]="user.password"
+              class="form-control my-2"
+            >
 
-          @if (errors.password) {
-            <div class="text-danger">{{ errors.password }}</div>
-          }
+            @if (errors.password) {
+              <div class="text-danger">{{ errors.password }}</div>
+            }
 
-          <!--          @if (password.invalid && (password.dirty || password.touched)) {-->
-          <!--            @if (password.errors!['required']) {-->
-          <!--              <div class="text-danger">-->
-          <!--                El Password es requerido-->
-          <!--              </div>-->
-          <!--            }-->
+            <!--          @if (password.invalid && (password.dirty || password.touched)) {-->
+            <!--            @if (password.errors!['required']) {-->
+            <!--              <div class="text-danger">-->
+            <!--                El Password es requerido-->
+            <!--              </div>-->
+            <!--            }-->
 
-          <!--            @if (password.errors!['minlength']) {-->
-          <!--              <div class="text-danger">-->
-          <!--                El password debe tener al menos 6 caracteres!-->
-          <!--              </div>-->
-          <!--            }-->
-          <!--          }-->
+            <!--            @if (password.errors!['minlength']) {-->
+            <!--              <div class="text-danger">-->
+            <!--                El password debe tener al menos 6 caracteres!-->
+            <!--              </div>-->
+            <!--            }-->
+            <!--          }-->
 
-        </div>
+          </div>
+        }
 
         <div>
           <button
