@@ -57,11 +57,9 @@ export class UserAppComponent implements OnInit {
         error: error => {
 
           if (error.status === 401) {
-
-            console.log(error.error);
             Swal.fire(
               'Error en el Login',
-              'Username o password inválidos',
+              error.error.message,
               'error'
             );
           } else {
