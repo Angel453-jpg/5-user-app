@@ -31,8 +31,8 @@ export class UserFormComponent implements OnInit {
       const id: number = +(params.get('id') || '0');
 
       if (id > 0) {
-        // this.sharingData.findUserByIdEventEmitter.emit(id);
-        this.service.findById(id).subscribe(user => this.user = user);
+        this.sharingData.findUserByIdEventEmitter.emit(id);
+        // this.service.findById(id).subscribe(user => this.user = user);
       }
 
     });
