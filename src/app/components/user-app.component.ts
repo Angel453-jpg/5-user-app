@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Users} from '../models/users';
 import {UserService} from '../services/user.service';
 import Swal from 'sweetalert2';
-import {ActivatedRoute, Router, RouterOutlet} from '@angular/router';
+import {Router, RouterOutlet} from '@angular/router';
 import {NavbarComponent} from './navbar/navbar.component';
 import {SharingDataService} from '../services/sharing-data.service';
 import {AuthService} from '../services/auth.service';
@@ -23,8 +23,7 @@ export class UserAppComponent implements OnInit {
   paginator: any = {};
 
   constructor(private service: UserService, private sharingData: SharingDataService, private router: Router,
-              private authService: AuthService,
-              private route: ActivatedRoute) {
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
