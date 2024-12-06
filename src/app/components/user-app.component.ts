@@ -20,10 +20,6 @@ import {add, find, findAll, remove, setPaginator, update} from '../store/users-a
 })
 export class UserAppComponent implements OnInit {
 
-  users: Users[] = [];
-
-  paginator: any = {};
-
   user!: Users;
 
   constructor(
@@ -31,8 +27,6 @@ export class UserAppComponent implements OnInit {
     private service: UserService, private sharingData: SharingDataService, private router: Router,
     private authService: AuthService) {
     this.store.select('users').subscribe(state => {
-      this.users = state.users;
-      this.paginator = state.paginator;
       this.user = {...state.user};
     })
   }
@@ -108,7 +102,7 @@ export class UserAppComponent implements OnInit {
           next: (userUpdated) => {
             // this.users = this.users.map(u => (u.id == userUpdate.id) ? {...userUpdate} : u);
             this.store.dispatch(update({userUpdated}));
-            this.router.navigate(['/users'], {state: {users: this.users, paginator: this.paginator}});
+            this.router.navigate(['/users']);
 
             Swal.fire({
               title: "Actualizado!",
@@ -129,9 +123,8 @@ export class UserAppComponent implements OnInit {
         this.service.create(user).subscribe({
           next: userNew => {
             console.log(userNew);
-            // this.users = [...this.users, {...userNew}];
             this.store.dispatch(add({userNew}));
-            this.router.navigate(['/users'], {state: {users: this.users, paginator: this.paginator}});
+            this.router.navigate(['/users']);
 
             Swal.fire({
               title: "Creado nuevo usuario!",
@@ -168,10 +161,9 @@ export class UserAppComponent implements OnInit {
         if (result.isConfirmed) {
 
           this.service.remove(id).subscribe(() => {
-            // this.users = this.users.filter(user => user.id != id);
             this.store.dispatch(remove({id}));
             this.router.navigate(['/users/create'], {skipLocationChange: true}).then(() => {
-              this.router.navigate(['/users'], {state: {users: this.users, paginator: this.paginator}});
+              this.router.navigate(['/users']);
             });
           })
 
