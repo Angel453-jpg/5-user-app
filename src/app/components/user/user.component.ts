@@ -35,18 +35,8 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    if (this.users == undefined || this.users.length == 0) {
-      console.log('consulta findAll')
-      this.route.paramMap.subscribe(params => {
-        const page = +(params.get('page') || '0');
-        console.log(page);
-        this.store.dispatch(load({page}));
-      })
-    }
-
+    this.route.paramMap.subscribe(params => this.store.dispatch(load({page: +(params.get('page') || '0')})))
   }
-
 
   onRemoveUser(id: number): void {
     this.sharingData.idUserEventEmitter.emit(id);
