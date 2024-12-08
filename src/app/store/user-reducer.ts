@@ -7,9 +7,11 @@ import {
   findAllPageable,
   load,
   remove,
+  resetUser,
   setErrors,
   setPaginator,
-  update
+  setUserForm,
+  updateSuccess
 } from './users-actions';
 
 const users: Users[] = [];
@@ -22,6 +24,18 @@ export const usersReducer = createReducer(
     user,
     errors: {}
   },
+  on(resetUser, (state) => ({
+    users: state.users,
+    paginator: state.paginator,
+    user: {...user},
+    errors: state.errors
+  })),
+  on(setUserForm, (state, {user}) => ({
+    users: state.users,
+    paginator: state.paginator,
+    user: {...user},
+    errors: state.errors
+  })),
   on(load, (state, {page}) => ({
     users: state.users,
     paginator: state.paginator,
@@ -60,7 +74,7 @@ export const usersReducer = createReducer(
     user: state.user,
     errors: state.errors,
   })),
-  on(update, (state, {userUpdated}) => ({
+  on(updateSuccess, (state, {userUpdated}) => ({
     users: state.users.map(u => (u.id == userUpdated.id) ? {...userUpdated} : u),
     paginator: state.paginator,
     user: state.user,
