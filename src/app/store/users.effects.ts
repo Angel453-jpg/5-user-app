@@ -1,7 +1,7 @@
 import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {UserService} from '../services/user.service';
 import {Injectable} from '@angular/core';
-import {add, addSuccess, findAllPageable, load, setErrors} from './users-actions';
+import {add, addSuccess, findAllPageable, load, setErrors, update, updateSuccess} from './users-actions';
 import {catchError, EMPTY, exhaustMap, map, of, tap} from 'rxjs';
 import {Users} from '../models/users';
 import Swal from 'sweetalert2';
@@ -16,7 +16,12 @@ export class UsersEffects {
 
   addSuccessUser$;
 
+  updateUsers$;
+
+  updateSuccessUser$;
+
   constructor(private actions$: Actions, private service: UserService, private router: Router) {
+
     this.loadUsers$ = createEffect(
       () => this.actions$.pipe(
         ofType(load),
@@ -37,7 +42,7 @@ export class UsersEffects {
         ofType(add),
         exhaustMap(action => this.service.create(action.userNew)
           .pipe(
-            map(userNew => addSuccess({userNew})),
+            map(userUpdated => updateSuccess({userUpdated})),
             catchError(error => (error.status == 400) ? of(setErrors({errors: error.error})) : EMPTY
             )
           )
@@ -52,6 +57,31 @@ export class UsersEffects {
         Swal.fire({
           title: "Creado nuevo usuario!",
           text: "Usuario creado con éxito!",
+          icon: "success"
+        });
+      })
+    ), {dispatch: false});
+
+    this.updateUsers$ = createEffect(
+      () => this.actions$.pipe(
+        ofType(update),
+        exhaustMap(action => this.service.update(action.userUpdated)
+          .pipe(
+            map(userUpdated => updateSuccess({userUpdated})),
+            catchError(error => (error.status == 400) ? of(setErrors({errors: error.error})) : EMPTY
+            )
+          )
+        )
+      )
+    );
+
+    this.updateSuccessUser$ = createEffect(() => this.actions$.pipe(
+      ofType(updateSuccess),
+      tap(() => {
+        this.router.navigate(['/users']);
+        Swal.fire({
+          title: "Actualizado!",
+          text: "Usuario editado con éxito!",
           icon: "success"
         });
       })

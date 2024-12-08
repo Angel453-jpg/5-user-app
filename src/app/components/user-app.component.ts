@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Users} from '../models/users';
 import {UserService} from '../services/user.service';
 import Swal from 'sweetalert2';
 import {Router, RouterOutlet} from '@angular/router';
@@ -7,7 +6,7 @@ import {NavbarComponent} from './navbar/navbar.component';
 import {SharingDataService} from '../services/sharing-data.service';
 import {AuthService} from '../services/auth.service';
 import {Store} from '@ngrx/store';
-import {add, find, findAll, remove, setPaginator, update} from '../store/users-actions';
+import {remove} from '../store/users-actions';
 
 @Component({
   selector: 'user-app',
@@ -20,22 +19,14 @@ import {add, find, findAll, remove, setPaginator, update} from '../store/users-a
 })
 export class UserAppComponent implements OnInit {
 
-  user!: Users;
-
   constructor(
     private store: Store<{ users: any }>,
     private service: UserService, private sharingData: SharingDataService, private router: Router,
     private authService: AuthService) {
-    this.store.select('users').subscribe(state => {
-      this.user = {...state.user};
-    })
   }
 
   ngOnInit(): void {
-    this.addUser();
     this.removeUser();
-    this.findUserById()
-    this.pageUsersEvent();
     this.handlerLogin();
   }
 
@@ -75,74 +66,6 @@ export class UserAppComponent implements OnInit {
         }
       });
     })
-  }
-
-  pageUsersEvent() {
-    this.sharingData.pageUsersEventEmitter.subscribe(pageable => {
-      // this.users = pageable.users;
-      // this.paginator = pageable.paginator;
-      this.store.dispatch(findAll({users: pageable.users}));
-      this.store.dispatch(setPaginator({paginator: pageable.paginator}));
-    });
-  }
-
-  findUserById() {
-    this.sharingData.findUserByIdEventEmitter.subscribe(id => {
-      // const user = this.users.find(user => user.id == id);
-      this.store.dispatch(find({id}));
-      this.sharingData.selectUserEventEmitter.emit(this.user);
-    })
-  }
-
-  addUser() {
-    this.sharingData.newUserEventEmitter.subscribe(user => {
-
-      if (user.id > 0) {
-        this.service.update(user).subscribe({
-          next: (userUpdated) => {
-            // this.users = this.users.map(u => (u.id == userUpdate.id) ? {...userUpdate} : u);
-            this.store.dispatch(update({userUpdated}));
-            this.router.navigate(['/users']);
-
-            Swal.fire({
-              title: "Actualizado!",
-              text: "Usuario editado con éxito!",
-              icon: "success"
-            });
-
-          },
-          error: (err) => {
-            // console.log(err.error)
-            if (err.status == 400) {
-              this.sharingData.errorsUserFormEventEmitter.emit(err.error);
-            }
-          }
-        })
-
-      } else {
-        this.service.create(user).subscribe({
-          next: userNew => {
-            console.log(userNew);
-            this.store.dispatch(add({userNew}));
-            this.router.navigate(['/users']);
-
-            Swal.fire({
-              title: "Creado nuevo usuario!",
-              text: "Usuario creado con éxito!",
-              icon: "success"
-            });
-
-          },
-          error: (err) => {
-            console.log(err.status)
-            if (err.status == 400) {
-              this.sharingData.errorsUserFormEventEmitter.emit(err.error);
-            }
-          }
-        })
-      }
-    })
-
   }
 
   removeUser() {

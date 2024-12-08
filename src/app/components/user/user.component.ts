@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Users} from '../../models/users';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {SharingDataService} from '../../services/sharing-data.service';
 import {PaginatorComponent} from '../paginator/paginator.component';
 import {AuthService} from '../../services/auth.service';
@@ -26,7 +26,7 @@ export class UserComponent implements OnInit {
   constructor(
     private store: Store<{ users: any }>,
     private authService: AuthService,
-    private sharingData: SharingDataService, private route: ActivatedRoute) {
+    private sharingData: SharingDataService, private route: ActivatedRoute, private router: Router) {
 
     this.store.select('users').subscribe(state => {
       this.users = state.users;
@@ -40,6 +40,10 @@ export class UserComponent implements OnInit {
 
   onRemoveUser(id: number): void {
     this.sharingData.idUserEventEmitter.emit(id);
+  }
+
+  onSelectedUser(user: Users): void {
+    this.router.navigate(['/users/edit', user.id]);
   }
 
   get admin() {
