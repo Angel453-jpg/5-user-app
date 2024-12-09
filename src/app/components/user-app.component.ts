@@ -17,7 +17,8 @@ import {AuthService} from '../services/auth.service';
 export class UserAppComponent implements OnInit {
 
   constructor(
-    private sharingData: SharingDataService, private router: Router,
+    private sharingData: SharingDataService,
+    private router: Router,
     private authService: AuthService) {
   }
 
@@ -34,15 +35,14 @@ export class UserAppComponent implements OnInit {
 
           const token = response.token;
           const payload = this.authService.getPayload(token);
-          const user = {username: payload.sub};
-          const login = {
-            user,
+
+          this.authService.token = token;
+          this.authService.user = {
+            user: {username: payload.sub},
             isAuth: true,
             isAdmin: payload.isAdmin
-          }
-          this.authService.token = token;
-          this.authService.user = login;
-          this.router.navigate(['/users/page/0']);
+          };
+          this.router.navigate(['/users']);
         },
 
         error: error => {
