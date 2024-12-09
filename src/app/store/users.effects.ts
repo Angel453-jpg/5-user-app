@@ -12,7 +12,7 @@ import {
   update,
   updateSuccess
 } from './users-actions';
-import {catchError, EMPTY, exhaustMap, map, of, tap} from 'rxjs';
+import {catchError, exhaustMap, map, of, tap} from 'rxjs';
 import {Users} from '../models/users';
 import Swal from 'sweetalert2';
 import {Router} from '@angular/router';
@@ -45,7 +45,7 @@ export class UsersEffects {
               const paginator = pageable;
               return findAllPageable({users, paginator})
             }),
-            catchError(() => EMPTY)
+            catchError((error) => of(error))
           )
         )
       )
@@ -57,7 +57,10 @@ export class UsersEffects {
         exhaustMap(action => this.service.create(action.userNew)
           .pipe(
             map(userNew => addSuccess({userNew})),
-            catchError(error => (error.status == 400) ? of(setErrors({errors: error.error})) : EMPTY
+            catchError(error => (error.status == 400) ? of(setErrors({
+                userForm: action.userNew,
+                errors: error.error
+              })) : of(error)
             )
           )
         )
@@ -82,7 +85,10 @@ export class UsersEffects {
         exhaustMap(action => this.service.update(action.userUpdated)
           .pipe(
             map(userUpdated => updateSuccess({userUpdated})),
-            catchError(error => (error.status == 400) ? of(setErrors({errors: error.error})) : EMPTY
+            catchError(error => (error.status == 400) ? of(setErrors({
+                userForm: action.userUpdated,
+                errors: error.error
+              })) : of(error)
             )
           )
         )
@@ -106,9 +112,7 @@ export class UsersEffects {
         ofType(remove),
         exhaustMap(action => this.service.remove(action.id)
           .pipe(
-            map(id => removeSuccess({id})),
-            catchError(error => (error.status == 400) ? of(setErrors({errors: error.error})) : EMPTY
-            )
+            map(() => removeSuccess({id: action.id})),
           )
         )
       )
