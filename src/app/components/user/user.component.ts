@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {Users} from '../../models/users';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {SharingDataService} from '../../services/sharing-data.service';
 import {PaginatorComponent} from '../paginator/paginator.component';
 import {AuthService} from '../../services/auth.service';
 import {Store} from '@ngrx/store';
-import {load} from '../../store/users-actions';
+import {load, remove} from '../../store/users-actions';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'user',
@@ -26,7 +26,7 @@ export class UserComponent implements OnInit {
   constructor(
     private store: Store<{ users: any }>,
     private authService: AuthService,
-    private sharingData: SharingDataService, private route: ActivatedRoute, private router: Router) {
+    private route: ActivatedRoute, private router: Router) {
 
     this.store.select('users').subscribe(state => {
       this.users = state.users;
@@ -39,7 +39,20 @@ export class UserComponent implements OnInit {
   }
 
   onRemoveUser(id: number): void {
-    this.sharingData.idUserEventEmitter.emit(id);
+    Swal.fire({
+      title: "Seguro que deseas eliminar el usuario?",
+      text: "Cuidado el usuario sera eliminado del sistema !",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí!",
+      cancelButtonText: "Cancelar!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.store.dispatch(remove({id}));
+      }
+    });
   }
 
   onSelectedUser(user: Users): void {
