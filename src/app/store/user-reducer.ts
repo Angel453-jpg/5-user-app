@@ -6,7 +6,7 @@ import {
   findAll,
   findAllPageable,
   load,
-  remove,
+  removeSuccess,
   resetUser,
   setErrors,
   setPaginator,
@@ -28,7 +28,7 @@ export const usersReducer = createReducer(
     users: state.users,
     paginator: state.paginator,
     user: {...user},
-    errors: state.errors
+    errors: {}
   })),
   on(setUserForm, (state, {user}) => ({
     users: state.users,
@@ -80,7 +80,7 @@ export const usersReducer = createReducer(
     user: state.user,
     errors: state.errors,
   })),
-  on(remove, (state, {id}) => ({
+  on(removeSuccess, (state, {id}) => ({
     users: state.users.filter(user => user.id != id),
     paginator: state.paginator,
     user: state.user,
