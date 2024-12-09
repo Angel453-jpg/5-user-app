@@ -56,7 +56,7 @@ export class UsersEffects {
         ofType(add),
         exhaustMap(action => this.service.create(action.userNew)
           .pipe(
-            map(userUpdated => updateSuccess({userUpdated})),
+            map(userNew => addSuccess({userNew})),
             catchError(error => (error.status == 400) ? of(setErrors({errors: error.error})) : EMPTY
             )
           )
