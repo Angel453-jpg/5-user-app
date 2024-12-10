@@ -1,4 +1,4 @@
-import {ApplicationConfig, provideZoneChangeDetection} from '@angular/core';
+import {ApplicationConfig, provideZoneChangeDetection, isDevMode} from '@angular/core';
 import {provideRouter} from '@angular/router';
 
 import {routes} from './app.routes';
@@ -9,11 +9,13 @@ import {usersReducer} from './store/users/user-reducer';
 import {provideEffects} from '@ngrx/effects';
 import {UsersEffects} from './store/users/users.effects';
 import {authReducer} from './store/auth/auth.reducer';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import {AuthEffects} from './store/auth/auth.effects';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({eventCoalescing: true}),
+  providers: [provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes), provideHttpClient(withInterceptors([tokenInterceptor])), provideStore({
-      users: usersReducer,
-      auth: authReducer
-    }), provideEffects(UsersEffects)],
+        users: usersReducer,
+        auth: authReducer
+    }), provideEffects(UsersEffects, AuthEffects), provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() })],
 };
