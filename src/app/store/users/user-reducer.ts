@@ -5,7 +5,6 @@ import {
   find,
   findAll,
   findAllPageable,
-  load,
   removeSuccess,
   resetUser,
   setErrors,
@@ -21,25 +20,22 @@ export const usersReducer = createReducer(
     users,
     paginator: {},
     user,
-    errors: {}
+    errors: {},
+    loading: true
   },
   on(resetUser, (state) => ({
     users: state.users,
     paginator: state.paginator,
     user: {...user},
-    errors: {}
-  })),
-  on(load, (state, {page}) => ({
-    users: state.users,
-    paginator: state.paginator,
-    user: state.user,
-    errors: state.errors,
+    errors: {},
+    loading: state.loading
   })),
   on(findAll, (state, {users}) => ({
       users: [...users],
       paginator: state.paginator,
       user: state.user,
       errors: state.errors,
+      loading: false
     }
   )),
   on(findAllPageable, (state, {users, paginator}) => ({
@@ -47,6 +43,7 @@ export const usersReducer = createReducer(
       paginator: {...paginator},
       user: state.user,
       errors: state.errors,
+      loading: false
     }
   )),
   on(find, (state, {id}) => ({
@@ -54,35 +51,41 @@ export const usersReducer = createReducer(
     paginator: state.paginator,
     user: state.users.find(user => user.id == id) || new Users(),
     errors: state.errors,
+    loading: state.loading
   })),
   on(setPaginator, (state, {paginator}) => ({
     users: state.users,
     paginator: {...paginator},
     user: state.user,
     errors: state.errors,
+    loading: state.loading
   })),
   on(addSuccess, (state, {userNew}) => ({
     users: [...state.users, {...userNew}],
     paginator: state.paginator,
     user: {...user},
     errors: {},
+    loading: state.loading
   })),
   on(updateSuccess, (state, {userUpdated}) => ({
     users: state.users.map(u => (u.id == userUpdated.id) ? {...userUpdated} : u),
     paginator: state.paginator,
     user: {...user},
     errors: {},
+    loading: state.loading
   })),
   on(removeSuccess, (state, {id}) => ({
     users: state.users.filter(user => user.id != id),
     paginator: state.paginator,
     user: state.user,
     errors: state.errors,
+    loading: state.loading
   })),
   on(setErrors, (state, {userForm, errors}) => ({
     users: state.users,
     paginator: state.paginator,
     user: {...userForm},
-    errors: {...errors}
+    errors: {...errors},
+    loading: state.loading
   }))
 );

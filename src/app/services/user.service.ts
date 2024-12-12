@@ -2,27 +2,20 @@ import {Injectable} from '@angular/core';
 import {Users} from '../models/users';
 import {map, Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
+import {BACKEND_URL} from '../components/config/config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private url: string = 'http://localhost:8080/api/users';
+  private url: string = `${BACKEND_URL}/api/users`;
 
   constructor(private http: HttpClient) {
   }
 
-  findAll(): Observable<Users[]> {
-    return this.http.get<Users[]>(this.url);
-  }
-
   findAllPageable(page: number): Observable<any> {
     return this.http.get<any>(`${this.url}/page/${page}`);
-  }
-
-  findById(id: number): Observable<Users> {
-    return this.http.get<Users>(`${this.url}/${id}`);
   }
 
   create(user: Users): Observable<Users> {
