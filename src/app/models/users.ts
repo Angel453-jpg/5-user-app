@@ -5,4 +5,5 @@ export class Users {
   email: string = '';
   username: string = '';
   password: string = '';
+  admin: boolean = false;
 }
